@@ -10,7 +10,7 @@ from .auth import login_manager
 from .data import db
 import fashion_wardrobe_tracker.errors as errors
 import fashion_wardrobe_tracker.logger as logger
-from .tracking.views import tracking
+from .wardrobe.views import wardrobe
 from .users.views import users
 
 
@@ -33,7 +33,7 @@ logger.init_app(app, app.logger.level) if\
     logger.init_app(app, app.logger.parent.level)
 
 
-app.register_blueprint(tracking)
+app.register_blueprint(wardrobe)
 app.register_blueprint(users)
 
 

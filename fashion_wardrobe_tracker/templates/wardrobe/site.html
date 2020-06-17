@@ -8,11 +8,11 @@
 &lt;script>
 (function() {
 	var img = new Image();
-	img.src = "{{ url_for('tracking.add_visit', site_id=site.id, event='PageLoad', _external=true) }}";
+	img.src = "{{ url_for('wardrobe.landing', user_id=user.id, event='PageLoad', _external=true) }}";
 })();
 &lt;/script>
 &lt;noscript>
-&lt;img src="{{ url_for('tracking.add_visit', site_id=site.id, event='PageLoad', _external=true) }}" width="1" height="1" />
+&lt;img src="{{ url_for('wardrobe.landing', user_id=user.id, event='PageLoad', _external=true) }}" width="1" height="1" />
 &lt;/noscript>
 </pre></code>
 <h2>Visits for {{ site.base_url }}</h2>

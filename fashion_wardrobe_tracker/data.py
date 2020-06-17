@@ -25,7 +25,7 @@ class CRUDMixin(object):
         return cls.query.get_or_404(id)
 
     def update(self, commit=True, **kwargs):
-        for attr, value in kwargs.iteritems():
+        for attr, value in kwargs.items():
             setattr(self, attr, value)
         return commit and self.save() or self
 
@@ -55,3 +55,15 @@ def query_to_list(query, include_field_names=True):
 def obj_to_list(sa_obj, field_order):
     """Takes a SQLAlchemy object - returns a list of all its data"""
     return [getattr(sa_obj, field_name, None) for field_name in field_order]
+
+
+class BodyBuild(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    build = db.Column(db.String(120))
+    description = db.Column(db.String(250))
+
+
+class BodyShape(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    shape = db.Column(db.String(120))
+    description = db.Column(db.String(250))

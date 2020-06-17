@@ -2,6 +2,9 @@
 {% block title %}Welcome to Flask Tracking!{% endblock %}
 {% block content %}
 {{ super() }}
+
+{% if current_user.is_anonymous %}
 <p>Welcome stranger! If you are new, come on and <a href="{{url_for('users.register')}}">register with us</a>.
 If you have been here before then why not <a href="{{url_for('users.login')}}">sign in</a>?</p>
+{% endif %}
 {% endblock content %}

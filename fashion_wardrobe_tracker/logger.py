@@ -82,7 +82,7 @@ def setup_logger(app, level=10):
         },
         'loggers': {
             app.name: {
-                'handlers': ['debug', 'default', 'filer'],
+                'handlers': ['default', 'filer'],
                 'level': level,
                 'propagate': False
             }

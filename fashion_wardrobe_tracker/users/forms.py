@@ -1,5 +1,6 @@
 # fashion_wardrobe_tracker/users/forms.py
 from flask_wtf import FlaskForm
+from flask_login import current_user
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 from wtforms import fields
 from wtforms.validators import Email, InputRequired, ValidationError
@@ -56,3 +57,12 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter(User.email == field.data).first()
         if user is not None:
             raise ValidationError("A user with that email already exists")
+
+
+
+class UserProfileForm(FlaskForm):
+    height = fields.IntegerField("Height (in cm)")
+    weight = fields.IntegerField("Weight (in kg)")
+    build = fields.SelectField('Build Type', default='short', coerce=str)
+    shape = fields.SelectField('Build Shape', default='round', coerce=str)
+    birthdate = fields.DateField('Birthday (MM/DD/YYYY)', format='%m/%d/%Y')

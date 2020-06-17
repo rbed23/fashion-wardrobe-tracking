@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% import "helpers/forms.html" as forms %}
+{% block title %}Sign up for Flask Tracking!{% endblock %}
+{% block content %}
+{{super()}}
+{% if not current_user.profile_exists() %}
+<form action="{{url_for('users.create_profile', user_id=user_id)}}" method="POST">
+{{ forms.render(form) }}
+<p><input type="Submit" value="Submit"></p>
+</form>
+{% endif %}
+{% if current_user.profile_exists() %}
+<form action="{{url_for('users.create_profile', user_id=user_id)}}" method="POST">
+{{ forms.render(form) }}
+<p><input type="Button" value="Back" onclick="history.back()">
+<input type="Submit" value="Update"></p>
+</form>
+{% endif %}
+{% endblock content %}

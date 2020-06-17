@@ -4,14 +4,11 @@
 {% block title %}Available Sites{% endblock %}
 {% block content %}
 {{super()}}
-<form action="{{url_for('tracking.view_sites')}}" method="POST">
+<form action="{{url_for('wardrobe.landing')}}" method="POST">
 <fieldset>
-<legend>Add A Site</legend>
+<legend>Add A Wardrobe</legend>
 {{ forms.render(form) }}
-<p><input type="Submit" value="Add Site"></p>
+<p><input type="Submit" value="Add Wardrobe"></p>
 </fieldset>
 </form>
-<table>
-{{ tables.render(sites) }}
-</table>
 {% endblock content %}

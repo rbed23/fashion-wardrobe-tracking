@@ -18,8 +18,8 @@ def login():
         flash("Logged in successfully.")
         current_app.logger.info('user logged in')
         if not current_user.profile:
-            return redirect(url_for('users.create_profile', user_id=form.user.id))
-        return redirect(request.args.get("next") or url_for("wardrobe.landing"))
+            return redirect(url_for('users.view_profile', user_id=form.user.id))
+        return redirect(request.args.get("next") or url_for("wardrobe.landing", profile_id=current_user.profile.id))
     
     if form.errors:
         flash("Login Unsuccessful.")
@@ -39,7 +39,7 @@ def register():
         user = User.create(**form.data)
         login_user(user)
         if not user.profile:
-            return redirect(url_for('users.create_profile', user_id=user.id))
+            return redirect(url_for('users.view_profile', user_id=user.id))
         else:
             return redirect(url_for('wardrobe.index'))
 
@@ -57,14 +57,14 @@ def register():
 
 @users.route('/user/<int:user_id>', methods=('GET', 'POST'))
 @login_required
-def create_profile(user_id):
-    user = User.query.filter(User.id==user_id).first()
+def view_profile(user_id):
+    user = User.query.get(user_id)
 
     if not user.id == user_id:
         abort(401)
 
     if user.profile_exists():
-        profile = Profile.query.filter(Profile.UserID==user.id).first()
+        profile = Profile.query.get(user.profile.id)
         form = UserProfileForm(obj=profile)
         form.build.choices = generate_selection(BodyBuild, 'build')
         form.build.default = profile.build
@@ -79,8 +79,8 @@ def create_profile(user_id):
 
     else:
         form = UserProfileForm()
-        form.build.choices = builds_selection
-        form.shape.choices = shapes_selection
+        form.build.choices = generate_selection(BodyBuild, 'build')
+        form.shape.choices = generate_selection(BodyShape, 'shape')
         if form.validate_on_submit():
             flash("Profile Creation Successful.")
             profile = Profile.create(**form.data)
@@ -89,7 +89,7 @@ def create_profile(user_id):
             print(f"User Profile: {user.profile}")
             print(f"Profile User: {profile.user}")
             current_app.logger.info(f'New profile created for User: {user_id}')
-            return redirect(url_for('wardrobe.wardrobe_user', user_id=profile.UserID))
+            return redirect(url_for('wardrobe.wardrobe_user', profile_id=profile.id))
 
     if form.errors:
         flash("Profile Creation Unsuccessful.")

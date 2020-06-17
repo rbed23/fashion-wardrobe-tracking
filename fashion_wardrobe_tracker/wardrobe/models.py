@@ -38,10 +38,11 @@ class Visit(CRUDMixin, db.Model):
 class Wardrobe(db.Model, CRUDMixin):
     __tablename__ = "wardrobe"
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     ProfileID = db.Column(db.Integer, db.ForeignKey('users_profile.id'))
-    profile = db.relationship("Profile", back_populates='wardrobe')
+    name = db.Column(db.String(120))
 
+    profile = db.relationship("Profile", back_populates='wardrobe')
     uppers = db.relationship('Upper', back_populates='wardrobe')
     lowers = db.relationship('Lower', back_populates='wardrobe')
     footers = db.relationship('Shoes', back_populates='wardrobe')
@@ -86,12 +87,12 @@ class Upper(CRUDMixin, db.Model):
         yield 'stretch', self.stretch
 
 
-class UpperStyle(db.Model):
+class UpperStyle(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     style = db.Column(db.String(120))
 
 
-class UpperPattern(db.Model):
+class UpperPattern(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     pattern = db.Column(db.String(120))
 
@@ -133,12 +134,12 @@ class Lower(CRUDMixin, db.Model):
         yield 'stretch', self.stretch
 
 
-class LowerStyle(db.Model):
+class LowerStyle(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     style = db.Column(db.String(120))
 
 
-class LowerPattern(db.Model):
+class LowerPattern(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     pattern = db.Column(db.String(120))
 
@@ -149,17 +150,17 @@ class Color(db.Model, CRUDMixin):
     color = db.Column(db.String(120))
 
 
-class Fit(db.Model):
+class Fit(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     fit = db.Column(db.String(120))
 
 
-class Material(db.Model):
+class Material(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     material = db.Column(db.String(120))
 
 
-class Size(db.Model):
+class Size(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     size = db.Column(db.String(120))
 
@@ -197,20 +198,20 @@ class Shoes(CRUDMixin, db.Model):
         yield 'material', self.material
 
 
-class ShoesStyle(db.Model):
+class ShoesStyle(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     style = db.Column(db.String(120))
 
 
-class ShoesPattern(db.Model):
+class ShoesPattern(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     pattern = db.Column(db.String(120))
 
-class ShoesFit(db.Model):
+class ShoesFit(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     fit = db.Column(db.String(120))
 
-class ShoesMaterial(db.Model):
+class ShoesMaterial(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     material = db.Column(db.String(120))
 

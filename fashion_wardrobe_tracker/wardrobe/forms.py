@@ -28,14 +28,14 @@ class VisitForm(FlaskForm):
 class UppersForm(FlaskForm):
     name = fields.StringField(
                 label="Name this Upper", validators=[Required()])
-    brand = fields.SelectField(
+    brand = fields.StringField(
                 label='Brand', validators=[Required()])
     style = fields.SelectField(
                 label='Style', validators=[Required()])
     size = fields.SelectField(
                 label='Size', validators=[Required()])
     year = fields.IntegerField(
-                label='Year - optional')
+                label='Year Obtained - optional')
     pattern = fields.SelectField(
                 label='Pattern', validators=[Required()])
     color1 = fields.SelectField(
@@ -56,7 +56,7 @@ class UppersForm(FlaskForm):
 class LowersForm(FlaskForm):
     name = fields.StringField(
                 label="Name this Lower", validators=[Required()])
-    brand = fields.SelectField(
+    brand = fields.StringField(
                 label='Brand', validators=[Required()])
     style = fields.SelectField(
                 label='Style', validators=[Required()])
@@ -65,7 +65,7 @@ class LowersForm(FlaskForm):
     inseam = fields.IntegerField(
                 label='Inseam', validators=[Required()])
     year = fields.IntegerField(
-                label='Year - optional')
+                label='Year Obtained - optional')
     pattern = fields.SelectField(
                 label='Pattern', validators=[Required()])
     color1 = fields.SelectField(
@@ -93,7 +93,7 @@ class FootersForm(FlaskForm):
     size = fields.DecimalField(
                 label='Shoe Size', validators=[Required()])
     year = fields.IntegerField(
-                label='Year - optional')
+                label='Year Obtained - optional')
     pattern = fields.SelectField(
                 label='Pattern', validators=[Required()])
     color1 = fields.SelectField(
@@ -112,6 +112,6 @@ class WardrobeForm(FlaskForm):
     name = fields.StringField(label="Name this Wardrobe",
                                 validators=[Required()])
 
-    uppers = fields.FormField(UppersForm)
-    lowers = fields.FormField(LowersForm)
-    footers = fields.FormField(FootersForm)
+    #uppers = fields.FormField(UppersForm)
+    #lowers = fields.FormField(LowersForm)
+    #footers = fields.FormField(FootersForm)

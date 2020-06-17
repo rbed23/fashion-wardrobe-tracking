@@ -3,13 +3,13 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from ..data import query_to_list
 from ..helpers import generate_selection
-from .forms import WardrobeForm
+from .forms import WardrobeForm, UppersForm
 from .models import Wardrobe, Upper, Lower, Shoes
 from .models import UpperStyle, UpperPattern
 from .models import LowerStyle, LowerPattern
 from .models import ShoesStyle, ShoesPattern, ShoesFit, ShoesMaterial
 from .models import Color, Fit, Material, Size
-from ..users.models import Profile
+from ..users.models import Profile, User
 from .geodata import get_geodata
 
 
@@ -22,12 +22,25 @@ def index():
     return render_template("index.html")
 
 
-@wardrobe.route("/wardrobe", methods=("POST", "GET"))
-def landing(user_id=None):
+@wardrobe.route("/wardrobe", methods=["GET", "POST"])
+def landing(profile_id=None):
     if current_user.is_anonymous:
         return render_template('users/login.html')
+    
+    profile = Profile.query.get_or_404(profile_id)\
+                if profile_id\
+                else Profile.query.get_or_404(current_user.profile.id)
+    wardrobe = Wardrobe.query.filter(Wardrobe.ProfileID==profile.id).first()\
+                if Wardrobe.query.filter(Wardrobe.ProfileID==profile.id).first()\
+                else Wardrobe()
+
+    if wardrobe.id:
+        user_id = wardrobe.profile.user.id
+        return redirect(url_for("wardrobe.wardrobe_user", user_id=user_id))
 
     wardrobe_form = WardrobeForm()
+
+    '''
     wardrobe_form.uppers.style.choices = generate_selection(UpperStyle, 'style')
     wardrobe_form.uppers.pattern.choices = generate_selection(UpperPattern, 'pattern')
     wardrobe_form.uppers.color1.choices = generate_selection(Color, 'color')
@@ -36,7 +49,7 @@ def landing(user_id=None):
     wardrobe_form.uppers.fit.choices = generate_selection(Fit, 'fit')
     wardrobe_form.uppers.material.choices = generate_selection(Material, 'material')
     wardrobe_form.uppers.size.choices = generate_selection(Size, 'size')
-        
+
     wardrobe_form.lowers.style.choices = generate_selection(LowerStyle, 'style')
     wardrobe_form.lowers.pattern.choices = generate_selection(LowerPattern, 'pattern')
     wardrobe_form.lowers.color1.choices = generate_selection(Color, 'color')
@@ -44,36 +57,33 @@ def landing(user_id=None):
     wardrobe_form.lowers.color3.choices = generate_selection(Color, 'color')
     wardrobe_form.lowers.fit.choices = generate_selection(Fit, 'fit')
     wardrobe_form.lowers.material.choices = generate_selection(Material, 'material')
-    wardrobe_form.lowers.size.choices = generate_selection(Size, 'size')
-    
+
     wardrobe_form.footers.style.choices = generate_selection(ShoesStyle, 'style')
-    wardrobe_form.footers.pattern.choices = generate_selection(ShoesPattern, 'style')
+    wardrobe_form.footers.pattern.choices = generate_selection(ShoesPattern, 'pattern')
     wardrobe_form.footers.color1.choices = generate_selection(Color, 'color')
     wardrobe_form.footers.color2.choices = generate_selection(Color, 'color')
     wardrobe_form.footers.color3.choices = generate_selection(Color, 'color')
     wardrobe_form.footers.fit.choices = generate_selection(ShoesFit, 'fit')
     wardrobe_form.footers.material.choices = generate_selection(ShoesMaterial, 'material')
-
-
-    if request.method == 'GET' and wardrobe_form.validate():
-        print(wardrobe_form.name)
-        return redirect('index')
+    '''
     if wardrobe_form.validate_on_submit():
         wardrobe = Wardrobe.create(**wardrobe_form.data)
-        flash(f"Added Wardrobe: {wardrobe.id}")
-        return redirect(url_for("wardrobe_form.user", user_id=current_user.id))
+        wardrobe.ProfileID = profile.id
+        wardrobe.update(**{'ProfileID': profile.id})
+        print(f"{wardrobe} from {wardrobe.profile} from {wardrobe.profile.user}")
+        flash(f"Added {wardrobe}")
+        return redirect(url_for("wardrobe.wardrobe_user", user_id=wardrobe.profile.user.id))
+    else:
+        print(wardrobe_form.errors)
 
-    print(wardrobe_form.errors)
-
-    return render_template("validation_error.html",
-                                form=wardrobe_form)
-
+    return render_template("wardrobe/wardrobe.html",
+                                wardrobe_form=wardrobe_form)
+                                        #lower_form,
+                                        #foote_form])
 
 @wardrobe.route("/wardrobe/<int:user_id>")
 @login_required
 def wardrobe_user(user_id=None):
-    if not user_id:
-        return redirect(url_for('landing', user_id=user_id))
     profile = Profile.query.filter(Profile.UserID==user_id).first()
     if not profile:
         abort(401)
@@ -85,13 +95,11 @@ def wardrobe_user(user_id=None):
         abort(401)
 
     
-    query = Wardrobe.query.filter(Wardrobe.ProfileID == profile.id).first()
+    query = Wardrobe.query.filter(Wardrobe.ProfileID == profile.id)
     data = query_to_list(query)
-    print(data)
-    return render_template("wardrobe/wardrobe.html",
-                                visits=data,
-                                site=data,
-                                title=data)
+    return render_template("wardrobe/wardrobe_view.html",
+                                data=data,
+                                wardrobe=wardrobe)
 
 
 @wardrobe.route("/visit", methods=("POST", ))

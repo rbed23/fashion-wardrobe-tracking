@@ -4,13 +4,13 @@
 {% block content %}
 {{super()}}
 {% if not current_user.profile_exists() %}
-<form action="{{url_for('users.create_profile', user_id=user_id)}}" method="POST">
+<form action="{{url_for('users.view_profile', user_id=user_id)}}" method="POST">
 {{ forms.render(form) }}
 <p><input type="Submit" value="Submit"></p>
 </form>
 {% endif %}
 {% if current_user.profile_exists() %}
-<form action="{{url_for('users.create_profile', user_id=user_id)}}" method="POST">
+<form action="{{url_for('users.view_profile', user_id=user_id)}}" method="POST">
 {{ forms.render(form) }}
 <p><input type="Button" value="Back" onclick="history.back()">
 <input type="Submit" value="Update"></p>

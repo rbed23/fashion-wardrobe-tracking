@@ -10,6 +10,8 @@ from fashion_wardrobe_tracker.wardrobe.models import UpperStyle
 from fashion_wardrobe_tracker.wardrobe.models import Material
 from fashion_wardrobe_tracker.wardrobe.models import ShoesMaterial
 from fashion_wardrobe_tracker.wardrobe.models import ShoesPattern
+from fashion_wardrobe_tracker.wardrobe.models import ShoesStyle
+from fashion_wardrobe_tracker.wardrobe.models import Size
 ###
 
 from fashion_wardrobe_tracker import app, db
@@ -18,40 +20,19 @@ from fashion_wardrobe_tracker.logger import ROOT_LOGGER_CONFIG
 
 if __name__ == "__main__":
 
-    colors = [
-        'dark red',
-        'red',
-        'crimson',
-        'pink',
-        'burnt sienna',
-        'orange',
-        'yellow',
-        'lime',
-        'green',
-        'forest green',
-        'cyan',
-        'sky blue',
-        'light blue',
-        'blue',
-        'dark blue',
-        'navy',
-        'indigo',
-        'purple',
-        'magenta',
-        'brown',
-        'khaki',
-        'mud',
-        'black',
-        'gray',
-        'dark gray',
-        'light gray',
-        'black',
-        'white',
-        'cream'
+    add_list = [
+        'XXS',
+        'XS',
+        'S',
+        'M',
+        'L',
+        'XL',
+        'XXL',
+        'XXXL'
     ]
 
     with app.app_context():
         print('in app')
-        for each in colors:
+        for each in add_list:
             print(each)
-            color = Color.create(color=each)
+            fit = Size.create(size=each)
